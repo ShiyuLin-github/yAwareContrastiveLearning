@@ -109,11 +109,13 @@ class yAwareCLModel:
         for epoch in range(self.config.nb_epochs):
             ## Training step
             self.model.train()
-            nb_batch = len(self.loader)
+            nb_batch = len(self.loader) #self.loader = train_loader
             training_loss = []
             pbar = tqdm(total=nb_batch, desc="Training")
+            #这段代码使用了 tqdm 库中的 tqdm 函数，用于在终端显示一个进度条，以跟踪代码执行的进度。
+
             for (inputs, labels) in self.loader:
-                pbar.update()
+                pbar.update() #pbar.update() 方法来更新进度条的进度。例如，如果代码中有一个循环进行了 nb_batch 次迭代，那么在每次迭代中，调用 pbar.update(1) 将进度条前进一步，最终达到总步数 nb_batch
                 inputs = inputs.to(self.device)
                 labels = labels.to(self.device)
                 self.optimizer.zero_grad()

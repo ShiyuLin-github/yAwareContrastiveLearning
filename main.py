@@ -15,8 +15,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--mode", type=str, choices=["pretraining", "finetuning"], required=True,
                         help="Set the training mode. Do not forget to configure config.py accordingly !")
-    args = parser.parse_args()
-    mode = PRETRAINING if args.mode == "pretraining" else FINE_TUNING
+    args = parser.parse_args()  #解析命令行参数,解析后可以用args.属性名进行访问
+    mode = PRETRAINING if args.mode == "pretraining" else FINE_TUNING  #这部分参数在控制台执行.py文件是通过--引入
 
     config = Config(mode)
 
