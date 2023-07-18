@@ -13,6 +13,7 @@ class MRIDataset(Dataset):
         self.transforms = Transformer()
         self.config = config
         self.transforms.register(Normalize(), probability=1.0)
+        #probability=1.0 表示这个数据转换操作将会在所有的样本上都被应用，即100%的概率进行转换。总结起来，这段代码的作用是将一个名为 Normalize() 的数据转换操作注册到 self.transforms 对象中，并指定这个转换操作在所有样本上都会被应用，即对数据集中的所有样本进行标准化操作。这样，当数据集中的样本被传递给模型进行训练时，Normalize() 操作将被自动应用，从而实现数据标准化的效果。
 
         if config.tf == "all_tf":
             self.transforms.register(Flip(), probability=0.5)
@@ -37,7 +38,7 @@ class MRIDataset(Dataset):
             self.labels = pd.read_csv(config.label_val)
 
         assert self.data.shape[1:] == tuple(config.input_size), "3D images must have shape {}".\
-            format(config.input_size)
+            format(config.input_size) #反斜杠是换行符，.format是用法，.\只是刚好巧了在一块
 
     def collate_fn(self, list_samples):
         list_x = torch.stack([torch.as_tensor(x, dtype=torch.float) for (x, y) in list_samples], dim=0)

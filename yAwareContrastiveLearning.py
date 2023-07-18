@@ -36,8 +36,10 @@ class yAwareCLModel:
 
         if hasattr(config, 'pretrained_path') and config.pretrained_path is not None:
             self.load_model(config.pretrained_path)
+        #hasattr(config, 'pretrained_path'): 这是Python的内置函数 hasattr()，用于检查一个对象（这里是 config 对象）是否有指定的属性。在这里，它用于检查 config 对象是否具有名为 pretrained_path 的属性。
 
         self.model = DataParallel(self.model).to(self.device)
+        #DataParallel(self.model): 这是 PyTorch 中的 DataParallel 类，用于实现数据并行处理。数据并行是一种将数据分割并在多个设备上并行处理的技术，用于加速训练过程。DataParallel 可以在多个 GPU 上并行处理数据，并将梯度的计算和参数更新同步。
 
     def pretraining(self):
         print(self.loss)
