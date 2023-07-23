@@ -50,6 +50,6 @@ class Config:
             self.lr = 1e-4
             self.weight_decay = 5e-5
 
-            self.pretrained_path = "/path/to/model.pth"
-            self.num_classes = 2
+            self.pretrained_path = "DenseNet121_BHB-10K_yAwareContrastive.pth"
+            self.num_classes = 3
             self.model = "DenseNet"
