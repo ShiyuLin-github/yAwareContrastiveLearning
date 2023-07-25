@@ -33,8 +33,10 @@ class Config:
             self.data_val = "/path/to/your/validation/data.npy"
             self.label_val = "/path/to/your/validation/metadata.csv"
 
-            self.input_size = (1, 121, 145, 121)
-            self.label_name = "age"
+            ##self.input_size = (C, H, W, D)
+            #self.input_size = (1, 121, 145, 121)
+            self.input_size = (1, 240, 240, 155)
+            self.label_name = "WHOclass"
 
             self.checkpoint_dir = "/path/to/your/saving/directory/"
 

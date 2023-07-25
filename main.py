@@ -1,6 +1,7 @@
 import numpy as np
+import torch
 from dataset import MRIDataset
-from torch.utils.data import DataLoader, Dataset, RandomSampler
+from torch.utils.data import DataLoader, Dataset, RandomSampler, Subset
 from yAwareContrastiveLearning import yAwareCLModel
 from losses import GeneralizedSupervisedNTXenLoss
 from torch.nn import CrossEntropyLoss
@@ -8,6 +9,7 @@ from models.densenet import densenet121
 from models.unet import UNet
 import argparse
 from config import Config, PRETRAINING, FINE_TUNING
+from Mydata import MyDataset, CustomDataset
 
 
 if __name__ == "__main__":
@@ -20,13 +22,20 @@ if __name__ == "__main__":
 
     config = Config(mode)
 
-    if config.mode == mode:
+    if config.mode == PRETRAINING:
         dataset_train = MRIDataset(config, training=True)
         dataset_val = MRIDataset(config, validation=True)
     else:
         ## Fill with your target dataset
-        dataset_train = Dataset()
-        dataset_val = Dataset()
+        # dataset_train = Dataset()
+        # dataset_val = Dataset()
+        # 随机将数据集按比例分配为训练集和测试集
+        custom_dataset = MyDataset(root_dir='I:/LSY/UCSF-PDGM-v3', csv_dir='UCSF-PDGM-metadata_v2.csv')
+        train_size = int(len(custom_dataset) * 0.7)
+        test_size = len(custom_dataset) - train_size
+        train_subset, test_subset = torch.utils.data.random_split(custom_dataset, [train_size, test_size])
+        dataset_train = CustomDataset(train_subset)
+        dataset_val = CustomDataset(test_subset)
 
     loader_train = DataLoader(dataset_train,
                               batch_size=config.batch_size,

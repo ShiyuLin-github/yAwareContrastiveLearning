@@ -5,9 +5,10 @@ from torch.utils.data import Dataset, DataLoader
 import nibabel as nib
 import numpy as np
 import pandas as pd
+from dataset import MRIDataset
+from torch.utils.data import Subset
 
-
-class MyDataset(Dataset):
+class MyDataset(MRIDataset):
     def __init__(self, root_dir, csv_dir, transform=None):
         self.root_dir = root_dir
         self.samples = os.listdir(root_dir)
@@ -44,3 +45,13 @@ class MyDataset(Dataset):
 
         # Return the input tensor and any additional labels or targets
         return input_tensor, label  # label是你的样本的标签，需要自己定义
+
+
+class CustomDataset(MyDataset):
+    def __init__(self, dataset):
+        self.dataset = dataset
+    def collate_fn(self, list_samples):
+        list_x = torch.stack([torch.as_tensor(x, dtype=torch.float) for (x, y) in list_samples], dim=0)
+        list_y = torch.stack([torch.as_tensor(y, dtype=torch.float) for (x, y) in list_samples], dim=0)
+
+        return (list_x, list_y)
