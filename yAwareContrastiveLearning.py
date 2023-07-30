@@ -110,7 +110,8 @@ class yAwareCLModel:
             ## Training step
             self.model.train()
             nb_batch = len(self.loader) #self.loader = train_loader
-            training_loss = []
+            # training_loss = []
+            training_loss = 0
             pbar = tqdm(total=nb_batch, desc="Training")
             #这段代码使用了 tqdm 库中的 tqdm 函数，用于在终端显示一个进度条，以跟踪代码执行的进度。
 
@@ -120,10 +121,11 @@ class yAwareCLModel:
                 labels = labels.to(self.device)
                 self.optimizer.zero_grad()
                 y = self.model(inputs)
-                batch_loss = self.loss(y,labels)
+                batch_loss = self.loss(y,labels.long()) #这里加了labels后.long()防止出现浮点数错误
                 batch_loss.backward()
                 self.optimizer.step()
                 training_loss += float(batch_loss) / nb_batch
+                # training_loss += batch_loss.item() / nb_batch
             pbar.close()
 
             ## Validation step
@@ -137,7 +139,7 @@ class yAwareCLModel:
                     inputs = inputs.to(self.device)
                     labels = labels.to(self.device)
                     y = self.model(inputs)
-                    batch_loss = self.loss(y, labels)
+                    batch_loss = self.loss(y, labels.long())
                     val_loss += float(batch_loss) / nb_batch
             pbar.close()
 

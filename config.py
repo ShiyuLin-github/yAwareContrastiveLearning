@@ -42,7 +42,7 @@ class Config:
 
         elif self.mode == FINE_TUNING:
             ## We assume a classification task here
-            self.batch_size = 6
+            self.batch_size = 1
             self.nb_epochs_per_saving = 10
             self.pin_mem = True
             self.num_cpu_workers = 1

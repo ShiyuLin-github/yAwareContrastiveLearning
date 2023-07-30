@@ -36,8 +36,8 @@ if __name__ == "__main__":
         # train_subset, test_subset = torch.utils.data.random_split(custom_dataset, [train_size, test_size])
         # dataset_train = CustomDataset(train_subset)
         # dataset_val = CustomDataset(test_subset)
-        dataset_train = MyDataset(root_dir='D:/Projects/Mydeepmedic/data/MRI/Train', csv_dir='UCSF-PDGM-metadata_v2.csv')
-        dataset_val = MyDataset(root_dir='D:/Projects/Mydeepmedic/data/MRI/Test', csv_dir='UCSF-PDGM-metadata_v2.csv')
+        dataset_train = MyDataset(root_dir='H:/LSY/Train', csv_dir='UCSF-PDGM-metadata_v2.csv')
+        dataset_val = MyDataset(root_dir='H:/LSY/Test', csv_dir='UCSF-PDGM-metadata_v2.csv')
 
     loader_train = DataLoader(dataset_train,
                               batch_size=config.batch_size,
