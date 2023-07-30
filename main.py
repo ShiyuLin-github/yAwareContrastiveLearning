@@ -30,12 +30,14 @@ if __name__ == "__main__":
         # dataset_train = Dataset()
         # dataset_val = Dataset()
         # 随机将数据集按比例分配为训练集和测试集
-        custom_dataset = MyDataset(root_dir='I:/LSY/UCSF-PDGM-v3', csv_dir='UCSF-PDGM-metadata_v2.csv')
-        train_size = int(len(custom_dataset) * 0.7)
-        test_size = len(custom_dataset) - train_size
-        train_subset, test_subset = torch.utils.data.random_split(custom_dataset, [train_size, test_size])
-        dataset_train = CustomDataset(train_subset)
-        dataset_val = CustomDataset(test_subset)
+        # custom_dataset = MyDataset(root_dir='I:/LSY/UCSF-PDGM-v3', csv_dir='UCSF-PDGM-metadata_v2.csv')
+        # train_size = int(len(custom_dataset) * 0.7)
+        # test_size = len(custom_dataset) - train_size
+        # train_subset, test_subset = torch.utils.data.random_split(custom_dataset, [train_size, test_size])
+        # dataset_train = CustomDataset(train_subset)
+        # dataset_val = CustomDataset(test_subset)
+        dataset_train = MyDataset(root_dir='D:/Projects/Mydeepmedic/data/MRI/Train', csv_dir='UCSF-PDGM-metadata_v2.csv')
+        dataset_val = MyDataset(root_dir='D:/Projects/Mydeepmedic/data/MRI/Test', csv_dir='UCSF-PDGM-metadata_v2.csv')
 
     loader_train = DataLoader(dataset_train,
                               batch_size=config.batch_size,
