@@ -112,6 +112,10 @@ class yAwareCLModel:
             nb_batch = len(self.loader) #self.loader = train_loader
             # training_loss = []
             training_loss = 0
+            #从此处开始修改代码以查看训练和验证的准确度
+            correct = 0
+            total = 0
+            #以上
             pbar = tqdm(total=nb_batch, desc="Training")
             #这段代码使用了 tqdm 库中的 tqdm 函数，用于在终端显示一个进度条，以跟踪代码执行的进度。
 
@@ -125,12 +129,22 @@ class yAwareCLModel:
                 batch_loss.backward()
                 self.optimizer.step()
                 training_loss += float(batch_loss) / nb_batch
+                #查看准确率代码
+                _, predicted = torch.max(y.data, 1)
+                total += labels.size(0)
+                correct += (predicted == labels).sum().item()
+                #以上
+            train_acc = correct / total
             pbar.close()
 
             ## Validation step
             nb_batch = len(self.loader_val)
             pbar = tqdm(total=nb_batch, desc="Validation")
             val_loss = 0
+            #查看验证过程准确度
+            correct = 0
+            total = 0
+            #以上
             with torch.no_grad():
                 self.model.eval()
                 for (inputs, labels) in self.loader_val:
@@ -140,10 +154,16 @@ class yAwareCLModel:
                     y = self.model(inputs)
                     batch_loss = self.loss(y, labels.long())
                     val_loss += float(batch_loss) / nb_batch
+                    # 查看准确率代码
+                    _, predicted = torch.max(y.data, 1)
+                    total += labels.size(0)
+                    correct += (predicted == labels).sum().item()
+                    # 以上
+            val_acc = correct / total #查看验证准确度代码
             pbar.close()
 
-            print("Epoch [{}/{}] Training loss = {:.4f}\t Validation loss = {:.4f}\t".format(
-                epoch+1, self.config.nb_epochs, training_loss, val_loss), flush=True)
+            print("Epoch [{}/{}] Training loss = {:.4f}\t Validation loss = {:.4f}\t Training ACC = {:.4f}\t Validation ACC = {:.4f}\t".format(
+                epoch+1, self.config.nb_epochs, training_loss, val_loss, train_acc, val_acc), flush=True)
 
             if self.scheduler is not None:
                 self.scheduler.step()
