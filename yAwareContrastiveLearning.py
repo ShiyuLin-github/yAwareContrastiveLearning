@@ -125,7 +125,6 @@ class yAwareCLModel:
                 batch_loss.backward()
                 self.optimizer.step()
                 training_loss += float(batch_loss) / nb_batch
-                # training_loss += batch_loss.item() / nb_batch
             pbar.close()
 
             ## Validation step
