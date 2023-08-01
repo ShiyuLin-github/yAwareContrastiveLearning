@@ -3,7 +3,8 @@ import torch
 from torch.nn import DataParallel
 from tqdm import tqdm
 import logging
-
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import f1_score, accuracy_score, precision_score, recall_score
 
 
 
@@ -113,8 +114,8 @@ class yAwareCLModel:
             # training_loss = []
             training_loss = 0
             #从此处开始修改代码以查看训练和验证的准确度
-            correct = 0
-            total = 0
+            y_true = []
+            y_pred = []
             #以上
             pbar = tqdm(total=nb_batch, desc="Training")
             #这段代码使用了 tqdm 库中的 tqdm 函数，用于在终端显示一个进度条，以跟踪代码执行的进度。
@@ -129,22 +130,25 @@ class yAwareCLModel:
                 batch_loss.backward()
                 self.optimizer.step()
                 training_loss += float(batch_loss) / nb_batch
-                #查看准确率代码
+                #查看准确率,F1分数代码
                 _, predicted = torch.max(y.data, 1)
-                total += labels.size(0)
-                correct += (predicted == labels).sum().item()
+                y_true.extend(labels.cpu().numpy())
+                y_pred.extend(predicted.cpu().numpy())
                 #以上
-            train_acc = correct / total
+            #查看准确率,F1分数代码
+            train_f1 = f1_score(y_true, y_pred, average=None)
+            train_acc = accuracy_score(y_true, y_pred)
+            #以上
             pbar.close()
 
             ## Validation step
             nb_batch = len(self.loader_val)
             pbar = tqdm(total=nb_batch, desc="Validation")
             val_loss = 0
-            #查看验证过程准确度
-            correct = 0
-            total = 0
-            #以上
+            # 从此处开始修改代码以查看训练和验证的准确度
+            y_true = []
+            y_pred = []
+            # 以上
             with torch.no_grad():
                 self.model.eval()
                 for (inputs, labels) in self.loader_val:
@@ -154,16 +158,21 @@ class yAwareCLModel:
                     y = self.model(inputs)
                     batch_loss = self.loss(y, labels.long())
                     val_loss += float(batch_loss) / nb_batch
-                    # 查看准确率代码
+                    # 查看准确率,F1分数代码
                     _, predicted = torch.max(y.data, 1)
-                    total += labels.size(0)
-                    correct += (predicted == labels).sum().item()
+                    y_true.extend(labels.cpu().numpy())
+                    y_pred.extend(predicted.cpu().numpy())
                     # 以上
-            val_acc = correct / total #查看验证准确度代码
+            #查看准确率,F1分数代码
+            val_f1 = f1_score(y_true, y_pred, average=None)
+            val_acc = accuracy_score(y_true, y_pred)
+            #以上
             pbar.close()
 
             print("Epoch [{}/{}] Training loss = {:.4f}\t Validation loss = {:.4f}\t Training ACC = {:.4f}\t Validation ACC = {:.4f}\t".format(
                 epoch+1, self.config.nb_epochs, training_loss, val_loss, train_acc, val_acc), flush=True)
+            print('Traing F1:', train_f1)
+            print('Validation F1:', val_f1)
 
             if self.scheduler is not None:
                 self.scheduler.step()
