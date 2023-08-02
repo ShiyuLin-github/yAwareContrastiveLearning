@@ -14,7 +14,7 @@ class Config:
             self.nb_epochs_per_saving = 1
             self.pin_mem = True
             self.num_cpu_workers = 8
-            self.nb_epochs = 100
+            self.nb_epochs = 500
             self.cuda = True
             # Optimizer
             self.lr = 1e-4
@@ -46,10 +46,10 @@ class Config:
             self.nb_epochs_per_saving = 10
             self.pin_mem = True
             self.num_cpu_workers = 1
-            self.nb_epochs = 100
+            self.nb_epochs = 500
             self.cuda = True
             # Optimizer
-            self.lr = 1e-4
+            self.lr = 1e-4 #默认为1e-4
             self.weight_decay = 5e-5
 
             self.pretrained_path = "DenseNet121_BHB-10K_yAwareContrastive.pth"
