@@ -73,12 +73,13 @@ if __name__ == "__main__":
                                               sigma=config.sigma,
                                               return_logits=True)
     elif config.mode == FINE_TUNING:
-        loss = CrossEntropyLoss()
+        # loss = CrossEntropyLoss()
         # #给CE损失函数加上权重
         # weights = torch.FloatTensor([20, 20, 1]).cuda()
         # loss = CrossEntropyLoss(weight=weights)  # 交叉熵函数
         # #以上
         # loss = torch.nn.MSELoss() #用于回归任务
+        loss = torch.nn.L1Loss()
 
     model = yAwareCLModel(net, loss, loader_train, loader_val, config)
 

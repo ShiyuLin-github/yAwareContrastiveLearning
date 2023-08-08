@@ -53,6 +53,8 @@ class Config:
             self.weight_decay = 5e-5
 
             self.pretrained_path = "DenseNet121_BHB-10K_yAwareContrastive.pth"
-            self.num_classes = 3 #用于分类任务
-            # self.num_classes = 1 #用于回归任务
+            #
+            # self.num_classes = 3 #用于分类任务
+            self.num_classes = 1 #用于回归任务
+            #
             self.model = "DenseNet"
