@@ -50,6 +50,7 @@ if __name__ == "__main__":
                             pin_memory=config.pin_mem,
                             num_workers=config.num_cpu_workers
                             )
+
     if config.mode == PRETRAINING:
         if config.model == "DenseNet":
             net = densenet121(mode="encoder", drop_rate=0.0)

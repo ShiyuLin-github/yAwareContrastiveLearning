@@ -37,6 +37,7 @@ class yAwareCLModel:
 
         if hasattr(config, 'pretrained_path') and config.pretrained_path is not None:
             self.load_model(config.pretrained_path)
+            # self.load_and_freeze_model(config.pretrained_path) #冻结预训练参数
         #hasattr(config, 'pretrained_path'): 这是Python的内置函数 hasattr()，用于检查一个对象（这里是 config 对象）是否有指定的属性。在这里，它用于检查 config 对象是否具有名为 pretrained_path 的属性。
 
         self.model = DataParallel(self.model).to(self.device)
@@ -262,7 +263,31 @@ class yAwareCLModel:
             except BaseException as e:
                 raise ValueError('Error while loading the model\'s weights: %s' % str(e))
 
+    def load_and_freeze_model(self, path): #冻结加载的预训练参数
+        checkpoint = None
+        try:
+            checkpoint = torch.load(path, map_location=lambda storage, loc: storage)
+        except BaseException as e:
+            self.logger.error('Impossible to load the checkpoint: %s' % str(e))
+        if checkpoint is not None:
+            try:
+                if hasattr(checkpoint, "state_dict"):
+                    unexpected = self.model.load_state_dict(checkpoint.state_dict())
+                    self.logger.info('Model loading info: {}'.format(unexpected))
+                elif isinstance(checkpoint, dict):
+                    if "model" in checkpoint:
+                        unexpected = self.model.load_state_dict(checkpoint["model"], strict=False)
+                        self.logger.info('Model loading info: {}'.format(unexpected))
+                else:
+                    unexpected = self.model.load_state_dict(checkpoint)
+                    self.logger.info('Model loading info: {}'.format(unexpected))
 
+                # 冻结加载的预训练参数
+                for param in self.model.parameters():
+                    param.requires_grad = False
+
+            except BaseException as e:
+                raise ValueError('Error while loading the model\'s weights: %s' % str(e))
 
 
 
