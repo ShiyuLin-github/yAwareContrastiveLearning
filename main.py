@@ -14,6 +14,10 @@ from Mydata import MyDataset, CustomDataset
 
 if __name__ == "__main__":
 
+    # #设置随机种子数以复现结果
+    seed = 42
+    torch.manual_seed(seed)
+
     parser = argparse.ArgumentParser()
     parser.add_argument("--mode", type=str, choices=["pretraining", "finetuning"], required=True,
                         help="Set the training mode. Do not forget to configure config.py accordingly !")
@@ -29,13 +33,6 @@ if __name__ == "__main__":
         ## Fill with your target dataset
         # dataset_train = Dataset()
         # dataset_val = Dataset()
-        # 随机将数据集按比例分配为训练集和测试集
-        # custom_dataset = MyDataset(root_dir='I:/LSY/UCSF-PDGM-v3', csv_dir='UCSF-PDGM-metadata_v2.csv')
-        # train_size = int(len(custom_dataset) * 0.7)
-        # test_size = len(custom_dataset) - train_size
-        # train_subset, test_subset = torch.utils.data.random_split(custom_dataset, [train_size, test_size])
-        # dataset_train = CustomDataset(train_subset)
-        # dataset_val = CustomDataset(test_subset)
         dataset_train = MyDataset(root_dir='H:/LSY/MySplit/Train', csv_dir='UCSF-PDGM-metadata_v2.csv')
         dataset_val = MyDataset(root_dir='H:/LSY/MySplit/Test', csv_dir='UCSF-PDGM-metadata_v2.csv')
 
