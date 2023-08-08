@@ -78,6 +78,7 @@ if __name__ == "__main__":
         # weights = torch.FloatTensor([20, 20, 1]).cuda()
         # loss = CrossEntropyLoss(weight=weights)  # 交叉熵函数
         # #以上
+        # loss = torch.nn.MSELoss() #用于回归任务
 
     model = yAwareCLModel(net, loss, loader_train, loader_val, config)
 
