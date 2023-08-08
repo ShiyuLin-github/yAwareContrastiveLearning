@@ -40,9 +40,14 @@ class MyDataset(MRIDataset):
         # 原ID比csv文件中的ID多了个0，比如UCSF-PDGM-0004，csv中是UCSF-PDGM-004。所以要修改一下
         id = self.samples[idx][:-6]
         id_fit = id[0:-4] + id[-3:]
-        label = self.csv_file.loc[self.csv_file['ID'] == id_fit, 'WHO CNS Grade'].values[0]
-        label = label - 2  # 从[2,3,4]转为[0,1,2]
-        # PyTorch会自动把整数型的label转为one-hot型，用于计算CE loss这里需要确保label是从0开始的,from深入浅出pytorch
+
+        # #用于分类任务的label
+        # label = self.csv_file.loc[self.csv_file['ID'] == id_fit, 'WHO CNS Grade'].values[0]
+        # label = label - 2  # 从[2,3,4]转为[0,1,2]
+        # # PyTorch会自动把整数型的label转为one-hot型，用于计算CE loss这里需要确保label是从0开始的,from深入浅出pytorch
+
+        #用于回归任务的label
+        label = self.csv_file.loc[self.csv_file['ID'] == id_fit, 'OS'].values[0]
 
         # Return the input tensor and any additional labels or targets
         return input_tensor, label  # label是你的样本的标签，需要自己定义
