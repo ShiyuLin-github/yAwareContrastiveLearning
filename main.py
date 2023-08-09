@@ -84,7 +84,8 @@ if __name__ == "__main__":
     if config.mode == PRETRAINING:
         model.pretraining()
     else:
-        model.fine_tuning()
+        # model.fine_tuning()
+        model.fine_tuning_regression() #用于回归任务
 
 
 

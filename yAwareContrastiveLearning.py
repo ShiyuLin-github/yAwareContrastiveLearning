@@ -36,8 +36,10 @@ class yAwareCLModel:
         self.metrics = {}
 
         if hasattr(config, 'pretrained_path') and config.pretrained_path is not None:
-            self.load_model(config.pretrained_path)
-            # self.load_and_freeze_model(config.pretrained_path) #冻结预训练参数
+
+            # self.load_model(config.pretrained_path)
+            self.load_and_freeze_model(config.pretrained_path) #冻结预训练参数
+
         #hasattr(config, 'pretrained_path'): 这是Python的内置函数 hasattr()，用于检查一个对象（这里是 config 对象）是否有指定的属性。在这里，它用于检查 config 对象是否具有名为 pretrained_path 的属性。
 
         self.model = DataParallel(self.model).to(self.device)
@@ -156,6 +158,7 @@ class yAwareCLModel:
             # 从此处开始修改代码以查看训练和验证的准确度
             y_true = []
             y_pred = []
+            best_loss = 1000
             # 以上
 
             with torch.no_grad():
@@ -188,6 +191,16 @@ class yAwareCLModel:
             print('Traing F1:', train_f1)
             print('Validation F1:', val_f1)
             #以上
+
+            save = True
+            save_path = 'Classfication_AllSamples.pt'
+            #保存最佳权重
+            if train_acc == 1:
+                if val_loss < best_loss:
+                    best_loss = val_loss  # 更新最高精确度
+                    if save:
+                        torch.save(self.model.state_dict(), save_path)  # 保存当前最佳权重参数
+                        print('Save Epoch[{}] to the save path'.format(epoch+1))
 
             if self.scheduler is not None:
                 self.scheduler.step()

@@ -30,7 +30,7 @@ class MyDataset(MRIDataset):
 
         # Combine the four MRI sequences into a single input tensor
         # input_tensor = torch.Tensor(np.stack([t1, t1c, t2, flair, asl], axis=0))
-        input_tensor = torch.Tensor(t1)
+        input_tensor = torch.Tensor(asl)
         input_tensor = torch.unsqueeze(input_tensor, dim=0) #将维度从D,H,W 变为C,D,H,W仅对单通道时用这行代码
         # input_tensor = input_tensor.permute(0,3,1,2) #将维度重排为 [C, D, H, W]，有了transform就不需要在这里重排了，这个代码要求数据格式为[C, H, W, D]这里就不进行permute了
         if self.transform:
