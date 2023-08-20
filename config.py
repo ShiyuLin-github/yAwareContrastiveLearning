@@ -49,12 +49,12 @@ class Config:
             self.nb_epochs = 500
             self.cuda = True
             # Optimizer
-            self.lr = 1e-3 #默认为1e-4
+            self.lr = 1e-4 #默认为1e-4
             self.weight_decay = 5e-5
 
             self.pretrained_path = "DenseNet121_BHB-10K_yAwareContrastive.pth"
 
-            # self.num_classes = 3 #用于分类任务
-            self.num_classes = 1 #用于回归任务
+            self.num_classes = 3 #用于分类任务
+            # self.num_classes = 1 #用于回归任务
 
             self.model = "DenseNet"

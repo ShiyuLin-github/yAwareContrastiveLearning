@@ -37,8 +37,8 @@ class yAwareCLModel:
 
         if hasattr(config, 'pretrained_path') and config.pretrained_path is not None:
 
-            # self.load_model(config.pretrained_path)
-            self.load_and_freeze_model(config.pretrained_path) #冻结预训练参数
+            self.load_model(config.pretrained_path)
+            # self.load_and_freeze_model(config.pretrained_path) #冻结预训练参数
 
         #hasattr(config, 'pretrained_path'): 这是Python的内置函数 hasattr()，用于检查一个对象（这里是 config 对象）是否有指定的属性。在这里，它用于检查 config 对象是否具有名为 pretrained_path 的属性。
 
@@ -114,7 +114,7 @@ class yAwareCLModel:
             ## Training step
             self.model.train()
             nb_batch = len(self.loader) #self.loader = train_loader
-            training_loss = []
+            # training_loss = []
             training_loss = 0
 
             #从此处开始修改代码以查看训练和验证的准确度

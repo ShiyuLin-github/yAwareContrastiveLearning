@@ -11,6 +11,8 @@ import argparse
 from config import Config, PRETRAINING, FINE_TUNING
 from Mydata import MyDataset, CustomDataset
 
+#从分类到回归，模型的最后num_class要改，loss函数要改，模型的finetuning函数要改，data的label要改
+
 
 if __name__ == "__main__":
 
@@ -71,21 +73,21 @@ if __name__ == "__main__":
                                               sigma=config.sigma,
                                               return_logits=True)
     elif config.mode == FINE_TUNING:
-        # loss = CrossEntropyLoss()
+        loss = CrossEntropyLoss()
         # #给CE损失函数加上权重
         # weights = torch.FloatTensor([20, 20, 1]).cuda()
         # loss = CrossEntropyLoss(weight=weights)  # 交叉熵函数
         # #以上
         # loss = torch.nn.MSELoss() #用于回归任务
-        loss = torch.nn.L1Loss()
+        # loss = torch.nn.L1Loss()
 
     model = yAwareCLModel(net, loss, loader_train, loader_val, config)
 
     if config.mode == PRETRAINING:
         model.pretraining()
     else:
-        # model.fine_tuning()
-        model.fine_tuning_regression() #用于回归任务
+        model.fine_tuning()
+        # model.fine_tuning_regression() #用于回归任务
 
 
 
