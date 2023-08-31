@@ -109,6 +109,7 @@ class yAwareCLModel:
     def fine_tuning(self):
         print(self.loss)
         print(self.optimizer)
+        best_loss = 100 #设定初始best loss以保存最佳参数模型
 
         for epoch in range(self.config.nb_epochs):
             ## Training step
@@ -116,6 +117,7 @@ class yAwareCLModel:
             nb_batch = len(self.loader) #self.loader = train_loader
             # training_loss = []
             training_loss = 0
+
 
             #从此处开始修改代码以查看训练和验证的准确度
             y_true = []
@@ -158,7 +160,6 @@ class yAwareCLModel:
             # 从此处开始修改代码以查看训练和验证的准确度
             y_true = []
             y_pred = []
-            best_loss = 1000
             # 以上
 
             with torch.no_grad():
