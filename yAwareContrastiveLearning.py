@@ -132,7 +132,7 @@ class yAwareCLModel:
                 self.optimizer.zero_grad()
                 y = self.model(inputs)
 
-                batch_loss = self.loss(y,labels.long()) #这里加了labels后.long()防止出现浮点数错误
+                batch_loss = self.loss(y,labels.long()) #这里加了labels后.long()防止出现浮点数错误,long() 函数将数字或字符串转换为一个长整型
 
                 batch_loss.backward()
                 self.optimizer.step()
@@ -195,12 +195,11 @@ class yAwareCLModel:
             save = True
             save_path = 'Classfication_AllSamples.pt'
             #保存最佳权重
-            if train_acc == 1:
-                if val_loss < best_loss:
-                    best_loss = val_loss  # 更新最高精确度
-                    if save:
-                        torch.save(self.model.state_dict(), save_path)  # 保存当前最佳权重参数
-                        print('Save Epoch[{}] to the save path'.format(epoch+1))
+            if val_loss < best_loss:
+                best_loss = val_loss  # 更新最高精确度
+                if save:
+                    torch.save(self.model.state_dict(), save_path)  # 保存当前最佳权重参数
+                    print('Save Epoch[{}] to the save path'.format(epoch+1))
 
             if self.scheduler is not None:
                 self.scheduler.step()
