@@ -37,8 +37,10 @@ class yAwareCLModel:
 
         if hasattr(config, 'pretrained_path') and config.pretrained_path is not None:
 
-            self.load_model(config.pretrained_path)
-            # self.load_and_freeze_model(config.pretrained_path) #冻结预训练参数
+            # self.load_model(config.pretrained_path)
+            self.load_and_freeze_model(config.pretrained_path) #冻结预训练参数
+            for k, v in self.model.named_parameters():
+                print('{}: {}'.format(k, v.requires_grad))
 
         #hasattr(config, 'pretrained_path'): 这是Python的内置函数 hasattr()，用于检查一个对象（这里是 config 对象）是否有指定的属性。在这里，它用于检查 config 对象是否具有名为 pretrained_path 的属性。
 
@@ -194,7 +196,7 @@ class yAwareCLModel:
             #以上
 
             save = True
-            save_path = 'Result/ASL_Classfication_AllSamples_Epoch{}.pt'.format(epoch+1)
+            save_path = 'Result/freeze_ASL_Classfication_AllSamples_Epoch{}.pt'.format(epoch+1)
             #保存最佳权重
             if val_loss < best_loss:
                 best_loss = val_loss  # 更新最高精确度
@@ -296,8 +298,11 @@ class yAwareCLModel:
                     self.logger.info('Model loading info: {}'.format(unexpected))
 
                 # 冻结加载的预训练参数
-                for param in self.model.parameters():
-                    param.requires_grad = False
+                for name, param in self.model.named_parameters():
+                    if "features" in name:
+                        param.requires_grad = False
+                        print(name)
+
 
             except BaseException as e:
                 raise ValueError('Error while loading the model\'s weights: %s' % str(e))
