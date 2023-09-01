@@ -194,7 +194,7 @@ class yAwareCLModel:
             #以上
 
             save = True
-            save_path = 'Classfication_AllSamples.pt'
+            save_path = 'Result/ASL_Classfication_AllSamples_Epoch{}.pt'.format(epoch+1)
             #保存最佳权重
             if val_loss < best_loss:
                 best_loss = val_loss  # 更新最高精确度
